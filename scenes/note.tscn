@@ -1,6 +1,6 @@
 [gd_scene load_steps=26 format=3 uid="uid://6xfn4nq2o6t2"]
 
-[ext_resource type="Script" path="res://scripts/note.gd" id="1_h66s6"]
+[ext_resource type="Script" uid="uid://4yxdqsnu1n7a" path="res://scripts/note.gd" id="1_h66s6"]
 [ext_resource type="Texture2D" uid="uid://3ii2rs78beqi" path="res://icons/Check.png" id="2_0ccyf"]
 [ext_resource type="Texture2D" uid="uid://ufs75c631sq5" path="res://icons/More.png" id="3_b6h6x"]
 [ext_resource type="Texture2D" uid="uid://b28hnauo7cnyp" path="res://icons/Add.png" id="3_vhkoc"]
@@ -292,7 +292,6 @@ Targets = [NodePath("../../../../margin/Head")]
 IsPanel = true
 target_values = ["shadow_color"]
 value_c = Color(0.439216, 0.00784314, 0.439216, 0.419608)
-global_save = null
 
 [node name="hd2_c" parent="VBoxContainer/PanelContainer/more_sett/row1" instance=ExtResource("5_qajn5")]
 layout_mode = 2
@@ -301,7 +300,6 @@ Targets = [NodePath("../../../../margin/Head")]
 IsPanel = true
 target_values = ["bg_color"]
 value_c = Color(0, 0, 0, 0)
-global_save = null
 
 [node name="ttl_c" parent="VBoxContainer/PanelContainer/more_sett/row1" instance=ExtResource("5_qajn5")]
 layout_mode = 2
@@ -309,7 +307,6 @@ text = "title color"
 Targets = [NodePath("../../../../margin/Head/Title")]
 target_values = ["default_color"]
 value_c = Color(1, 1, 1, 1)
-global_save = null
 
 [node name="row2" type="HBoxContainer" parent="VBoxContainer/PanelContainer/more_sett"]
 layout_mode = 2
@@ -321,7 +318,6 @@ Targets = [NodePath("../../../../..")]
 IsPanel = true
 target_values = ["border_color"]
 value_c = Color(0.439216, 0.00784314, 0.439216, 0.419608)
-global_save = null
 
 [node name="msd_c" parent="VBoxContainer/PanelContainer/more_sett/row2" instance=ExtResource("5_qajn5")]
 layout_mode = 2
@@ -330,7 +326,6 @@ Targets = [NodePath("../../../../..")]
 IsPanel = true
 target_values = ["shadow_color"]
 value_c = Color(0.164706, 0.164706, 0.164706, 0.368627)
-global_save = null
 
 [node name="mbg_c" parent="VBoxContainer/PanelContainer/more_sett/row2" instance=ExtResource("5_qajn5")]
 layout_mode = 2
@@ -339,7 +334,6 @@ Targets = [NodePath("../../../../..")]
 IsPanel = true
 target_values = ["bg_color"]
 value_c = Color(0.164706, 0.164706, 0.164706, 0)
-global_save = null
 
 [node name="row3" type="HBoxContainer" parent="VBoxContainer/PanelContainer/more_sett"]
 layout_mode = 2

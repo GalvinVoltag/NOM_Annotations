@@ -10,7 +10,7 @@ var setting
 
 var overwrite = false
 
-var version = "v0.1.4-alpha.2"
+var version = "v0.1.4-beta.1"
 
 var AppData : Dictionary = {
 	"DefaultNote": {

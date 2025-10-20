@@ -1,15 +1,15 @@
-[gd_scene load_steps=29 format=3 uid="uid://b64qrmwyupmhd"]
+[gd_scene load_steps=30 format=3 uid="uid://b64qrmwyupmhd"]
 
-[ext_resource type="Script" path="res://scripts/control.gd" id="1_68oic"]
-[ext_resource type="Script" path="res://addons/SharePlugin/Share.gd" id="2_4l02d"]
+[ext_resource type="Script" uid="uid://b34d4ndbi1lpn" path="res://scripts/control.gd" id="1_68oic"]
+[ext_resource type="Script" uid="uid://dowuqxuufxf38" path="res://addons/SharePlugin/Share.gd" id="2_4l02d"]
 [ext_resource type="Texture2D" uid="uid://bd1w4wyxl68sq" path="res://icons/Settings.png" id="2_aka5p"]
 [ext_resource type="Texture2D" uid="uid://b28hnauo7cnyp" path="res://icons/Add.png" id="2_w5wxl"]
 [ext_resource type="Texture2D" uid="uid://nwg42uf1s000" path="res://icons/Arrow_Back.png" id="4_m5rv1"]
 [ext_resource type="PackedScene" uid="uid://d21n0oa01l2kr" path="res://scenes/value.tscn" id="5_bajle"]
-[ext_resource type="Script" path="res://addons/DeeplinkPlugin/Deeplink.gd" id="6_1xa06"]
-[ext_resource type="Script" path="res://scenes/setting.gd" id="6_n6c2q"]
+[ext_resource type="Script" uid="uid://dpysexd4sgxkg" path="res://addons/DeeplinkPlugin/Deeplink.gd" id="6_1xa06"]
+[ext_resource type="Script" uid="uid://bnvv32srkl7ek" path="res://scenes/setting.gd" id="6_n6c2q"]
 [ext_resource type="PackedScene" uid="uid://6xfn4nq2o6t2" path="res://scenes/note.tscn" id="6_uft3y"]
-[ext_resource type="Script" path="res://scenes/dialog_bringer.gd" id="9_orgyt"]
+[ext_resource type="Script" uid="uid://cgslp0wnxm3l8" path="res://scenes/dialog_bringer.gd" id="9_orgyt"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_amku1"]
 bg_color = Color(1, 0.941176, 0.121569, 1)
@@ -77,6 +77,8 @@ corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_s6sty"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ym5j1"]
 content_margin_left = 18.0
@@ -364,13 +366,46 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_nxicq")
 theme_override_styles/normal = SubResource("StyleBoxFlat_j12r0")
 text = "Paste from clipboard"
 
-[node name="cmd" type="TextEdit" parent="SettingsM/ScrollContainer/VBoxContainer"]
+[node name="cmdold" type="TextEdit" parent="SettingsM/ScrollContainer/VBoxContainer"]
 unique_name_in_owner = true
+visible = false
 custom_minimum_size = Vector2(0, 628)
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 theme_override_styles/normal = SubResource("StyleBoxFlat_ahsl4")
+text = "test text"
+editable = false
+scroll_smooth = true
 scroll_past_end_of_file = true
+
+[node name="cmdscroll" type="ScrollContainer" parent="SettingsM/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 618)
+layout_mode = 2
+
+[node name="cmd" type="RichTextLabel" parent="SettingsM/ScrollContainer/VBoxContainer/cmdscroll"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 618)
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 2
+theme_override_font_sizes/normal_font_size = 42
+theme_override_styles/focus = SubResource("StyleBoxEmpty_s6sty")
+theme_override_styles/normal = SubResource("StyleBoxFlat_ahsl4")
+bbcode_enabled = true
+text = "[color=lime]cmd>."
+fit_content = true
+scroll_active = false
+scroll_following = true
+autowrap_mode = 0
+selection_enabled = true
+
+[node name="cmdin" type="LineEdit" parent="SettingsM/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 42
+theme_override_styles/normal = SubResource("StyleBoxFlat_ahsl4")
+text = "command here"
 
 [node name="HExtBt" type="HBoxContainer" parent="SettingsM/ScrollContainer/VBoxContainer"]
 layout_mode = 2
@@ -617,6 +652,7 @@ text = "No"
 [connection signal="pressed" from="MarginContainer/Panel/VSplitContainer/Header/MarginContainer/Head/Dn/L/Add" to="." method="_on_add_pressed"]
 [connection signal="pressed" from="SettingsM/ScrollContainer/VBoxContainer/SttBck" to="." method="_on_stt_bck_pressed"]
 [connection signal="pressed" from="SettingsM/ScrollContainer/VBoxContainer/HBoxContainer/Paste" to="." method="_on_paste_pressed"]
+[connection signal="text_submitted" from="SettingsM/ScrollContainer/VBoxContainer/cmdin" to="." method="_on_submit"]
 [connection signal="pressed" from="SettingsM/ScrollContainer/VBoxContainer/HExtBt/HBoxContainer/ClearExt" to="." method="_on_clear_ext_pressed"]
 [connection signal="pressed" from="SettingsM/ScrollContainer/VBoxContainer/HExtBt/AddExt" to="." method="_on_add_ext_pressed"]
 [connection signal="deeplink_received" from="Deeplink" to="." method="_on_deeplink_deeplink_received"]

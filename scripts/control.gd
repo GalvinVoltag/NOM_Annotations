@@ -2,10 +2,32 @@ extends Control
 
 @onready var notebase = preload("res://scenes/note.tscn")
 
+enum Log {
+	WARNING,
+	ERROR,
+	TIP,
+	HELP,
+	LOG,
+	NONE,
+	SUCCESS
+}
+
 var LOVE = ""
 var note_count = 0
 var setting_on = false
 var murl = "https://galvinvoltag.github.io/galvinvoltag.com/nomann"
+
+func push_log(cli : RichTextLabel, type : Log, text : String, frontspace="	", newline = true):
+	if (newline): cli.text += "\n"
+	var logfix
+	if (type == Log.WARNING): logfix = ["[color=orange]-!-", "-!-"]
+	elif (type == Log.ERROR): logfix = ["[color=red]<!!>", "<!!>"]
+	elif (type == Log.TIP): logfix = ["[color=darkgray]-?- "," -?-"]
+	elif (type == Log.HELP): logfix = ["[color=lightgray]", ""]
+	elif (type == Log.LOG): logfix = ["[color=#eeeeee][log]<-", "->"]
+	elif (type == Log.NONE): logfix = ["[color=#eeeeee]", ""]
+	elif (type == Log.SUCCESS): logfix = ["[color=lime]<+ "," +>"]
+	cli.text += frontspace + logfix[0] + text + logfix[1]
 
 func get_bnumber(s):
 	match s[0]:
@@ -203,48 +225,60 @@ func _on_stt_bck_pressed():
 func add_text(org:String, add:String):
 	org = org+add
 
+func _on_submit(thing):
+	_on_add_ext_pressed()
+
 func _on_add_ext_pressed():
-	var command = %cmd.get_line(%cmd.get_line_count()-1).split(" ", false)
+	var command = %cmdin.text.split(" ", false)
+	if (command.size() == 0): command = [""]
+	%cmdin.text = ""
 	%cmd.text += "\n"
 	match command[0]:
-		"help", "?", "h":
+		"show", "shw":
 			if command.size() > 1:
 				match command[1]:
-					"delmem", "dmm":
-						%cmd.text += """<?> Formatting: delmem ( AppData / defaultnote )
-"""
-					_:
-						%cmd.text += "[!!]Please specify a valid command!\n"
+					"AllNotes":
+						push_log(%cmd, Log.NONE, JSON.stringify(Global.AllNotes, "	", false))
+					"AppData":
+						push_log(%cmd, Log.NONE, JSON.stringify(Global.AppData, "	", false))
 			else:
-				%cmd.text += """<?>This command line interface has been added in v0.1.4-beta.2 for beta testers' convenience sake.
-			
-		A command will ignore any extra inputs,
-		e.g. a command with single input will ignore all other phrases you enter.
-		
-		Each command also has a three or less letter variant for convenience sake, 
-		commands are as follows:
-		
-		help, h     --> Show this list or learn how to format a command with 'help (command)'
-		delmem, dmm --> Delete a specified local storage file from the device
-"""
-			
-			
-			
-			
+				push_log(%cmd, Log.ERROR, "Please specify the data")
 		"delmem", "dmm":
 			if command.size() > 1:
 				match command[1]:
 					"AppData":
 						if DirAccess.remove_absolute(OS.get_user_data_dir() + "/AppData.json") == OK:
-							%cmd.text += ">AppData has successfully been removed.\n"
+							push_log(%cmd, Log.SUCCESS, "AppData has successfully been removed")
 						else:
-							%cmd.text += "[!!!]>An error occured whilst removing AppData!\n"
+							push_log(%cmd, Log.ERROR, "An error occured whilst removing AppData")
 					_:
-						%cmd.text += "[!!]Please specify a valid memory file!\n"
+						push_log(%cmd, Log.WARNING, "Please specify a valid memory file")
 			else:
-				%cmd.text += "[!!]Please specify the memory type to delete!\n"
+				push_log(%cmd, Log.WARNING, "Please specify the memory type to delete")
 		_:
-			%cmd.text += "[!!]Unknown command!\n"
+			push_log(%cmd, Log.WARNING, "Unknown command")
+
+		"help", "?", "h":
+			if command.size() > 1:
+				match command[1]:
+					"delmem", "dmm":
+						push_log(%cmd, Log.TIP, """Formatting: delmem ( AppData / defaultnote )""")
+					_:
+						push_log(%cmd, Log.WARNING, "Please specify a valid command")
+			else:
+				push_log(%cmd, Log.HELP, """This command line interface has been added in v0.1.4-beta.2 for beta testers' convenience sake.
+			
+	Note:
+	 ->a command will ignore all extra input.
+	 ->each command also has a three or less letter variant for convenience sake.
+	
+	list of all commands is as follows:
+	+[color=white] help, h		--> [color=darkgray]Show this list or learn how to format a command with 'help (command)'
+	+[color=white] delmem, dmm	--> [color=darkgray]Delete a specified local storage file from the device""")
+
+	await %cmd.finished
+	await get_tree().process_frame
+	%cmdscroll.scroll_vertical = %cmd.get_content_height()
 
 
 func _on_paste_pressed():
